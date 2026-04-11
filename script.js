@@ -8,12 +8,9 @@ const initialState = {
   orientation: false,
   coreCredits: 0,
   methodsSeminar: false,
-  professionalDevelopment: false,
   qualifyingExam: false,
   committeeFormation: false,
   proposalDefense: false,
-  annualReviews: 0,
-  publications: 0,
   dissertationDraft: false,
   finalDefense: false,
 };
@@ -31,21 +28,21 @@ const semesterRules = [
   {
     id: "exam",
     title: "Qualifying exam",
-    note: "Target completion by the end of the sixth semester.",
+    note: "Aim to complete by the sixth semester.",
     offset: 5,
     className: "deadline-card--exam",
   },
   {
     id: "proposal",
     title: "Proposal defense",
-    note: "Schedule around the eighth semester after committee formation.",
+    note: "Usually planned around the eighth semester.",
     offset: 7,
     className: "deadline-card--proposal",
   },
   {
     id: "defense",
-    title: "Dissertation defense",
-    note: "A twelfth-semester finish keeps the final stretch manageable.",
+    title: "Final defense",
+    note: "A twelfth-semester finish is a common target.",
     offset: 11,
     className: "deadline-card--defense",
   },
@@ -55,7 +52,6 @@ const milestones = [
   {
     key: "orientation",
     label: "Program orientation",
-    type: "Onboarding",
     dependency: "None",
     renderInput: () => renderCheckbox("orientation"),
     status: () => (state.orientation ? "Completed" : "Not started"),
@@ -64,7 +60,6 @@ const milestones = [
   {
     key: "coreCredits",
     label: "Core coursework credits",
-    type: "Coursework",
     dependency: "None",
     renderInput: () => renderNumber("coreCredits", 30, "30 credits"),
     status: () => countStatus(state.coreCredits, 30),
@@ -73,26 +68,15 @@ const milestones = [
   {
     key: "methodsSeminar",
     label: "Research methods seminar",
-    type: "Coursework",
     dependency: "None",
     renderInput: () => renderCheckbox("methodsSeminar"),
     status: () => (state.methodsSeminar ? "Completed" : "Not started"),
     complete: () => state.methodsSeminar,
   },
   {
-    key: "professionalDevelopment",
-    label: "Teaching or professional development",
-    type: "Professional",
-    dependency: "None",
-    renderInput: () => renderCheckbox("professionalDevelopment"),
-    status: () => (state.professionalDevelopment ? "Completed" : "Not started"),
-    complete: () => state.professionalDevelopment,
-  },
-  {
     key: "qualifyingExam",
     label: "Qualifying exam",
-    type: "Exam",
-    dependency: "18+ core credits, methods seminar, and professional development",
+    dependency: "18+ credits and methods seminar",
     renderInput: () => renderCheckbox("qualifyingExam", eligibility.qualifyingExam()),
     status: () => gatedStatus("qualifyingExam", eligibility.qualifyingExam()),
     complete: () => state.qualifyingExam,
@@ -100,53 +84,33 @@ const milestones = [
   {
     key: "committeeFormation",
     label: "Dissertation committee formed",
-    type: "Governance",
     dependency: "Qualifying exam",
-    renderInput: () => renderCheckbox("committeeFormation", eligibility.committeeFormation()),
+    renderInput: () =>
+      renderCheckbox("committeeFormation", eligibility.committeeFormation()),
     status: () => gatedStatus("committeeFormation", eligibility.committeeFormation()),
     complete: () => state.committeeFormation,
   },
   {
     key: "proposalDefense",
     label: "Proposal defense",
-    type: "Defense",
-    dependency: "Qualifying exam, committee formed, and 30 core credits",
+    dependency: "Qualifying exam, committee formed, and 30 credits",
     renderInput: () => renderCheckbox("proposalDefense", eligibility.proposalDefense()),
     status: () => gatedStatus("proposalDefense", eligibility.proposalDefense()),
     complete: () => state.proposalDefense,
   },
   {
-    key: "annualReviews",
-    label: "Annual reviews completed",
-    type: "Review",
-    dependency: "Ongoing each year",
-    renderInput: () => renderNumber("annualReviews", 4, "4 reviews"),
-    status: () => countStatus(state.annualReviews, 4),
-    complete: () => state.annualReviews >= 4,
-  },
-  {
-    key: "publications",
-    label: "Publication submissions",
-    type: "Research",
-    dependency: "Recommended before the final writing push",
-    renderInput: () => renderNumber("publications", 2, "2 submissions"),
-    status: () => countStatus(state.publications, 2),
-    complete: () => state.publications >= 2,
-  },
-  {
     key: "dissertationDraft",
     label: "Dissertation draft ready",
-    type: "Writing",
-    dependency: "Proposal defense, 2 annual reviews, and 1 submission",
-    renderInput: () => renderCheckbox("dissertationDraft", eligibility.dissertationDraft()),
+    dependency: "Proposal defense",
+    renderInput: () =>
+      renderCheckbox("dissertationDraft", eligibility.dissertationDraft()),
     status: () => gatedStatus("dissertationDraft", eligibility.dissertationDraft()),
     complete: () => state.dissertationDraft,
   },
   {
     key: "finalDefense",
     label: "Final dissertation defense",
-    type: "Defense",
-    dependency: "Proposal defense, draft ready, 4 annual reviews, and 2 submissions",
+    dependency: "Proposal defense and dissertation draft",
     renderInput: () => renderCheckbox("finalDefense", eligibility.finalDefense()),
     status: () => gatedStatus("finalDefense", eligibility.finalDefense()),
     complete: () => state.finalDefense,
@@ -155,11 +119,7 @@ const milestones = [
 
 const eligibility = {
   qualifyingExam() {
-    return (
-      state.coreCredits >= 18 &&
-      state.methodsSeminar &&
-      state.professionalDevelopment
-    );
+    return state.coreCredits >= 18 && state.methodsSeminar;
   },
   committeeFormation() {
     return state.qualifyingExam;
@@ -168,23 +128,16 @@ const eligibility = {
     return state.qualifyingExam && state.committeeFormation && state.coreCredits >= 30;
   },
   dissertationDraft() {
-    return state.proposalDefense && state.annualReviews >= 2 && state.publications >= 1;
+    return state.proposalDefense;
   },
   finalDefense() {
-    return (
-      state.proposalDefense &&
-      state.dissertationDraft &&
-      state.annualReviews >= 4 &&
-      state.publications >= 2
-    );
+    return state.proposalDefense && state.dissertationDraft;
   },
 };
 
 function loadState() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return { ...initialState };
-  }
+  if (!raw) return { ...initialState };
 
   try {
     return { ...initialState, ...JSON.parse(raw) };
@@ -219,7 +172,7 @@ function renderCheckbox(key, isEligible = true) {
         ${state[key] ? "checked" : ""}
         ${isEligible || state[key] ? "" : "disabled"}
       />
-      <span>${state[key] ? "Marked complete" : "Mark complete"}</span>
+      <span>${state[key] ? "Completed" : "Mark complete"}</span>
     </label>
   `;
 }
@@ -254,11 +207,9 @@ function renderTracker() {
   tableBody.innerHTML = milestones
     .map((milestone) => {
       const status = milestone.status();
-
       return `
         <tr>
           <td><strong>${milestone.label}</strong></td>
-          <td class="tracker-table__type">${milestone.type}</td>
           <td>${milestone.renderInput()}</td>
           <td>${renderStatus(status)}</td>
           <td class="tracker-table__dependency">${milestone.dependency}</td>
@@ -270,15 +221,9 @@ function renderTracker() {
   cardWrap.innerHTML = milestones
     .map((milestone) => {
       const status = milestone.status();
-
       return `
         <article class="tracker-card">
-          <div class="tracker-card__meta">
-            <div>
-              <h3>${milestone.label}</h3>
-            </div>
-            <span class="tracker-card__type">${milestone.type}</span>
-          </div>
+          <h3>${milestone.label}</h3>
           <div class="tracker-card__row">
             <span>Input</span>
             ${milestone.renderInput()}
@@ -298,27 +243,19 @@ function renderTracker() {
 }
 
 function setupProfileFields() {
-  const profileFields = [
-    "studentName",
-    "programName",
-    "advisorName",
-    "entrySemester",
-  ];
-
-  profileFields.forEach((fieldId) => {
+  ["studentName", "programName", "advisorName", "entrySemester"].forEach((fieldId) => {
     const input = document.getElementById(fieldId);
     input.value = state[fieldId];
   });
 }
 
 function renderProfileSummary() {
-  const title = document.querySelector(".profile-summary__title");
-  const body = document.querySelector(".profile-summary__body");
+  const title = document.getElementById("summaryTitle");
+  const body = document.getElementById("summaryBody");
 
   if (!state.studentName && !state.programName && !state.advisorName) {
     title.textContent = "No student profile yet";
-    body.textContent =
-      "Add your name, program, advisor, and start term to tailor the dashboard.";
+    body.textContent = "Add your basic details to personalize the tracker.";
     return;
   }
 
@@ -328,7 +265,7 @@ function renderProfileSummary() {
   const semester = state.entrySemester || "an upcoming semester";
 
   title.textContent = `${name} · ${program}`;
-  body.textContent = `This roadmap is configured for ${name}, starting in ${semester}, ${advisor}. Update these fields anytime and the tracker will keep the same saved progress.`;
+  body.textContent = `Tracking progress for ${name}, starting in ${semester}, ${advisor}.`;
 }
 
 function generateSemesterOptions() {
@@ -375,7 +312,6 @@ function renderDeadlines() {
   wrap.innerHTML = semesterRules
     .map((rule) => {
       const label = semesterLabelAfter(state.entrySemester, rule.offset);
-
       return `
         <article class="deadline-card ${rule.className}">
           <p>${rule.title}</p>
@@ -405,62 +341,22 @@ function currentNextDeadline() {
 }
 
 function renderOverview() {
-  const total = milestones.length;
-  const completed = completedMilestonesCount();
-  const percent = Math.round((completed / total) * 100);
-  const ring = document.getElementById("progressRing");
-  const ringLabel = document.getElementById("progressPercent");
   const completedCount = document.getElementById("completedCount");
-  const readinessLabel = document.getElementById("readinessLabel");
-  const readinessNote = document.getElementById("readinessNote");
   const nextDeadlineLabel = document.getElementById("nextDeadlineLabel");
-  const nextDeadlineNote = document.getElementById("nextDeadlineNote");
-  const overviewList = document.getElementById("overviewList");
 
-  ring.style.setProperty("--progress", `${(percent / 100) * 360}deg`);
-  ringLabel.textContent = `${percent}%`;
-  completedCount.textContent = `${completed} / ${total}`;
-
-  let readiness = "Building momentum";
-  let readinessBody = "Start with your profile and core requirements";
-
-  if (state.finalDefense) {
-    readiness = "Graduation ready";
-    readinessBody = "Every major milestone in this tracker is marked complete.";
-  } else if (state.proposalDefense) {
-    readiness = "Writing phase";
-    readinessBody = "Shift attention toward drafting, reviews, and defense prep.";
-  } else if (state.qualifyingExam) {
-    readiness = "Committee phase";
-    readinessBody = "You can focus on committee alignment and your proposal.";
-  } else if (eligibility.qualifyingExam()) {
-    readiness = "Exam eligible";
-    readinessBody = "Core requirements are lined up for the qualifying exam.";
-  }
-
-  readinessLabel.textContent = readiness;
-  readinessNote.textContent = readinessBody;
+  completedCount.textContent = `${completedMilestonesCount()} / ${milestones.length}`;
 
   const next = currentNextDeadline();
   if (!next) {
     nextDeadlineLabel.textContent = state.entrySemester
       ? "All planned deadlines met"
-      : "Select an entry semester";
-    nextDeadlineNote.textContent = state.entrySemester
-      ? "Keep using the tracker for writing and review prep."
-      : "Recommended milestones update instantly";
-  } else {
-    nextDeadlineLabel.textContent = next.title;
-    nextDeadlineNote.textContent = semesterLabelAfter(state.entrySemester, next.offset);
+      : "Select a semester";
+    return;
   }
 
-  overviewList.innerHTML = [
-    `${Math.max(0, 30 - state.coreCredits)} core credits remaining until coursework is complete.`,
-    `${Math.max(0, 4 - state.annualReviews)} annual review milestone(s) remaining.`,
-    `${Math.max(0, 2 - state.publications)} publication submission(s) remaining before the final defense target.`,
-  ]
-    .map((item) => `<li>${item}</li>`)
-    .join("");
+  nextDeadlineLabel.textContent = state.entrySemester
+    ? `${next.title} · ${semesterLabelAfter(state.entrySemester, next.offset)}`
+    : next.title;
 }
 
 function handleInputChange(event) {

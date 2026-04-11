@@ -6,105 +6,84 @@
     <title>PhD Milestone Tracker</title>
     <meta
       name="description"
-      content="A responsive PhD milestone tracker for students to plan coursework, deadlines, proposal work, and dissertation progress."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap"
-      rel="stylesheet"
+      content="A simple and responsive PhD milestone tracker for students."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="page-shell">
       <header class="hero">
-        <div class="hero__copy">
-          <p class="eyebrow">Student Progress Dashboard</p>
-          <h1>PhD Milestone Tracker</h1>
-          <p class="hero__lede">
-            A responsive planning space inspired by milestone trackers used in
-            graduate programs, redesigned so any PhD student can map progress,
-            deadlines, and next steps in one place.
-          </p>
-        </div>
-
-        <div class="hero__stats">
-          <article class="stat-card stat-card--accent">
-            <span class="stat-card__label">Completed Milestones</span>
-            <strong id="completedCount" class="stat-card__value">0 / 10</strong>
-            <span class="stat-card__detail">Saved in your browser automatically</span>
-          </article>
-          <article class="stat-card">
-            <span class="stat-card__label">Readiness</span>
-            <strong id="readinessLabel" class="stat-card__value">Building momentum</strong>
-            <span id="readinessNote" class="stat-card__detail">Start with your profile and core requirements</span>
-          </article>
-          <article class="stat-card">
-            <span class="stat-card__label">Next Deadline</span>
-            <strong id="nextDeadlineLabel" class="stat-card__value">Select an entry semester</strong>
-            <span id="nextDeadlineNote" class="stat-card__detail">Recommended milestones update instantly</span>
-          </article>
-        </div>
+        <p class="eyebrow">Student Progress Dashboard</p>
+        <h1>PhD Milestone Tracker</h1>
+        <p class="hero__lede">
+          Track your major milestones in one place. Your progress is saved in
+          your own browser.
+        </p>
       </header>
 
       <main class="dashboard">
-        <section class="panel panel--profile">
-          <div class="section-heading">
-            <div>
-              <p class="section-heading__kicker">Section 1</p>
-              <h2>Profile Snapshot</h2>
+        <section class="panel panel--top">
+          <div>
+            <div class="section-heading">
+              <div>
+                <p class="section-heading__kicker">Student Details</p>
+                <h2>Your Tracker</h2>
+              </div>
             </div>
-            <p>
-              Personalize the tracker so the page feels like your own working
-              dashboard.
-            </p>
+
+            <div class="profile-grid">
+              <label class="field">
+                <span>Student Name</span>
+                <input id="studentName" type="text" placeholder="Priya Shah" />
+              </label>
+              <label class="field">
+                <span>Program</span>
+                <input id="programName" type="text" placeholder="Computer Science PhD" />
+              </label>
+              <label class="field">
+                <span>Advisor</span>
+                <input id="advisorName" type="text" placeholder="Dr. A. Mentor" />
+              </label>
+              <label class="field">
+                <span>Entry Semester</span>
+                <select id="entrySemester">
+                  <option value="">Choose a semester</option>
+                </select>
+              </label>
+            </div>
           </div>
 
-          <div class="profile-grid">
-            <label class="field">
-              <span>Student Name</span>
-              <input id="studentName" type="text" placeholder="Priya Shah" />
-            </label>
-            <label class="field">
-              <span>Program / Department</span>
-              <input
-                id="programName"
-                type="text"
-                placeholder="Computer Science PhD"
-              />
-            </label>
-            <label class="field">
-              <span>Advisor</span>
-              <input id="advisorName" type="text" placeholder="Dr. A. Mentor" />
-            </label>
-            <label class="field">
-              <span>Entry Semester</span>
-              <select id="entrySemester">
-                <option value="">Choose a semester</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="profile-summary" id="profileSummary">
-            <p class="profile-summary__title">No student profile yet</p>
-            <p class="profile-summary__body">
-              Add your name, program, advisor, and start term to tailor the
-              dashboard.
+          <aside class="summary-card">
+            <p class="summary-card__eyebrow">Progress</p>
+            <p class="summary-card__title" id="summaryTitle">No student profile yet</p>
+            <p class="summary-card__body" id="summaryBody">
+              Add your basic details to personalize the tracker.
             </p>
-          </div>
+
+            <div class="summary-stats">
+              <div>
+                <span class="summary-stats__label">Completed</span>
+                <strong id="completedCount">0 / 8</strong>
+              </div>
+              <div>
+                <span class="summary-stats__label">Next deadline</span>
+                <strong id="nextDeadlineLabel">Select a semester</strong>
+              </div>
+            </div>
+
+            <button id="resetTracker" class="ghost-button" type="button">
+              Reset saved tracker data
+            </button>
+          </aside>
         </section>
 
         <section class="panel">
           <div class="section-heading">
             <div>
-              <p class="section-heading__kicker">Section 2</p>
-              <h2>Milestone Tracker</h2>
+              <p class="section-heading__kicker">Milestones</p>
+              <h2>Tracker</h2>
             </div>
-            <p>
-              Log progress, watch eligibility unlock, and keep dependencies
-              visible at all times.
-            </p>
+            <p>Update each milestone as you move through the program.</p>
           </div>
 
           <div class="tracker-shell">
@@ -113,7 +92,6 @@
                 <thead>
                   <tr>
                     <th>Milestone</th>
-                    <th>Type</th>
                     <th>Input</th>
                     <th>Status</th>
                     <th>Dependency</th>
@@ -122,6 +100,7 @@
                 <tbody id="trackerTableBody"></tbody>
               </table>
             </div>
+
             <div id="trackerCards" class="tracker-cards" aria-live="polite"></div>
           </div>
         </section>
@@ -130,13 +109,10 @@
           <div>
             <div class="section-heading">
               <div>
-                <p class="section-heading__kicker">Section 3</p>
-                <h2>Recommended Deadlines</h2>
+                <p class="section-heading__kicker">Deadlines</p>
+                <h2>Recommended Timeline</h2>
               </div>
-              <p>
-                Deadlines are calculated from your entry semester using a
-                typical PhD pacing model.
-              </p>
+              <p>These dates are generated from your entry semester.</p>
             </div>
 
             <div id="deadlineCards" class="deadline-grid">
@@ -146,121 +122,43 @@
             </div>
           </div>
 
-          <aside class="progress-panel">
-            <div class="section-heading">
-              <div>
-                <p class="section-heading__kicker">Progress</p>
-                <h2>Overview</h2>
-              </div>
-            </div>
-
-            <div class="progress-ring-card">
-              <div
-                class="progress-ring"
-                id="progressRing"
-                role="img"
-                aria-label="Progress completion ring"
-              >
-                <span id="progressPercent">0%</span>
-              </div>
-              <div>
-                <p class="progress-ring-card__label">Tracker completion</p>
-                <p class="progress-ring-card__body">
-                  Use this as a lightweight self-check before annual meetings,
-                  committee reviews, or advisor check-ins.
-                </p>
-              </div>
-            </div>
-
-            <ul class="overview-list" id="overviewList">
-              <li>Complete core requirements to unlock your qualifying exam.</li>
-              <li>Form your committee after the qualifying exam is done.</li>
-              <li>Proposal, draft, and defense readiness update automatically.</li>
-            </ul>
-          </aside>
-        </section>
-
-        <section class="panel panel--two-up">
           <div>
             <div class="section-heading">
               <div>
-                <p class="section-heading__kicker">Section 4</p>
-                <h2>Recommended Timeline</h2>
+                <p class="section-heading__kicker">Simple Guide</p>
+                <h2>What To Finish First</h2>
               </div>
-              <p>
-                A simple semester-based sequence to help students spread work
-                without waiting until the end.
-              </p>
             </div>
 
             <div class="timeline">
               <article class="timeline-step">
                 <span>1</span>
                 <div>
-                  <h3>Build your foundation</h3>
-                  <p>
-                    Finish orientation, research methods, and most of your core
-                    credits in the first five semesters.
-                  </p>
+                  <h3>Coursework first</h3>
+                  <p>Finish orientation, methods, and your core credits early.</p>
                 </div>
               </article>
               <article class="timeline-step">
                 <span>2</span>
                 <div>
-                  <h3>Take the qualifying exam</h3>
-                  <p>
-                    Aim to complete the exam once course requirements are mostly
-                    behind you and your research direction has sharpened.
-                  </p>
+                  <h3>Qualifying exam</h3>
+                  <p>After the basics are complete, move into the exam stage.</p>
                 </div>
               </article>
               <article class="timeline-step">
                 <span>3</span>
                 <div>
-                  <h3>Defend the proposal</h3>
-                  <p>
-                    Use the middle years to lock committee feedback, annual
-                    reviews, and the dissertation proposal.
-                  </p>
+                  <h3>Committee and proposal</h3>
+                  <p>Form your committee and complete the proposal defense.</p>
                 </div>
               </article>
               <article class="timeline-step">
                 <span>4</span>
                 <div>
-                  <h3>Draft and defend</h3>
-                  <p>
-                    Reserve the final stretch for writing, revisions,
-                    publication polish, and the dissertation defense.
-                  </p>
+                  <h3>Draft and defense</h3>
+                  <p>Track the dissertation draft and final defense here.</p>
                 </div>
               </article>
-            </div>
-          </div>
-
-          <div>
-            <div class="section-heading">
-              <div>
-                <p class="section-heading__kicker">Section 5</p>
-                <h2>Useful Resources</h2>
-              </div>
-              <p>
-                Keep the links you use most often close to the tracker.
-              </p>
-            </div>
-
-            <div class="resource-list">
-              <a href="#profileSummary" class="resource-link">
-                Student profile notes
-              </a>
-              <a href="#deadlineCards" class="resource-link">
-                Semester deadline roadmap
-              </a>
-              <a href="#trackerTableBody" class="resource-link">
-                Milestone and eligibility checklist
-              </a>
-              <button id="resetTracker" class="ghost-button" type="button">
-                Reset saved tracker data
-              </button>
             </div>
           </div>
         </section>

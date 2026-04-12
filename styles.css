@@ -36,6 +36,15 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+a {
+  color: #1f5bd8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 button,
 input,
 select {
@@ -74,7 +83,6 @@ select {
 
 .hero h1,
 .section-heading h2,
-.timeline-step h3,
 .tracker-card h3 {
   margin: 0;
 }
@@ -98,6 +106,43 @@ select {
   margin-top: 1.25rem;
 }
 
+.tab-bar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  padding: 0.8rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.tab-button:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.tab-button--active {
+  background: var(--accent-soft);
+  border-color: rgba(184, 137, 60, 0.38);
+  color: var(--ink);
+}
+
+.tab-panel {
+  display: none;
+  gap: 1.25rem;
+}
+
+.tab-panel--active {
+  display: grid;
+}
+
 .panel {
   padding: 1.4rem;
   border: 1px solid var(--line);
@@ -106,8 +151,7 @@ select {
   box-shadow: var(--shadow);
 }
 
-.panel--top,
-.panel--two-up {
+.panel--top {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
@@ -134,7 +178,6 @@ select {
 
 .section-heading p,
 .summary-card__body,
-.timeline-step p,
 .deadline-card h3,
 .deadline-card p,
 .deadline-placeholder p,
@@ -142,16 +185,22 @@ select {
 .tracker-card__dependency,
 .field span,
 .credit-caption,
-.input-inline {
+.input-inline,
+.panel-note,
+.guide-card__summary-copy p,
+.guide-card__block span,
+.resource-link span {
   color: var(--muted);
 }
 
 .section-heading p,
 .summary-card__body,
-.timeline-step p,
 .deadline-card h3,
 .deadline-card p,
-.tracker-card__dependency {
+.tracker-card__dependency,
+.panel-note,
+.guide-card__summary-copy p,
+.resource-link span {
   line-height: 1.6;
 }
 
@@ -179,7 +228,9 @@ select {
 .field input,
 .field select,
 .tracker-table input,
-.tracker-card input {
+.tracker-card input,
+.tracker-table select,
+.tracker-card select {
   width: 100%;
   padding: 0.82rem 0.9rem;
   border: 1px solid var(--line);
@@ -191,7 +242,9 @@ select {
 .field input:focus,
 .field select:focus,
 .tracker-table input:focus,
-.tracker-card input:focus {
+.tracker-card input:focus,
+.tracker-table select:focus,
+.tracker-card select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(184, 137, 60, 0.12);
@@ -332,13 +385,14 @@ select {
 
 .deadline-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.9rem;
 }
 
 .deadline-card,
 .deadline-placeholder,
-.timeline-step {
+.guide-card,
+.resource-link {
   padding: 1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
@@ -367,37 +421,148 @@ select {
   margin: 0;
 }
 
-.deadline-card strong {
-  display: block;
-  margin: 0.45rem 0;
-}
-
-.deadline-placeholder,
-.timeline-step {
-  background: #fafbfc;
-}
-
-.timeline {
-  display: grid;
-  gap: 0.85rem;
-}
-
-.timeline-step {
+.deadline-card {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.9rem;
   align-items: start;
 }
 
-.timeline-step span {
-  width: 2rem;
-  height: 2rem;
+.deadline-card__index {
+  width: 2.1rem;
+  height: 2.1rem;
   display: grid;
   place-items: center;
   border-radius: 50%;
   background: var(--accent);
   color: #fff;
   font-weight: 700;
+}
+
+.deadline-card strong {
+  display: block;
+  margin: 0.45rem 0;
+}
+
+.deadline-placeholder,
+.guide-card,
+.resource-link {
+  background: #fafbfc;
+}
+
+.panel-note {
+  margin: 1rem 0 0;
+  font-style: italic;
+}
+
+.guide-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.guide-card {
+  overflow: hidden;
+}
+
+.guide-card[open] {
+  background: #fcfcfb;
+}
+
+.guide-card__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.guide-card__summary::-webkit-details-marker {
+  display: none;
+}
+
+.guide-card__summary-copy {
+  min-width: 0;
+}
+
+.guide-card__summary-copy h3,
+.resource-link strong {
+  margin: 0;
+}
+
+.guide-card__summary-copy p {
+  margin: 0.35rem 0 0;
+}
+
+.guide-card__chevron {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.guide-card[open] .guide-card__chevron {
+  transform: rotate(225deg);
+}
+
+.guide-card__content {
+  display: grid;
+  gap: 0.95rem;
+  padding: 0 1rem 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.guide-card__block {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.guide-card__block span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.guide-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.guide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.guide-actions a {
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.resource-link {
+  display: grid;
+  gap: 0.45rem;
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+}
+
+.resource-link:hover {
+  border-color: var(--accent);
+  text-decoration: none;
 }
 
 .input-inline {
@@ -424,7 +589,6 @@ select {
 
 @media (max-width: 900px) {
   .panel--top,
-  .panel--two-up,
   .profile-grid,
   .summary-stats {
     grid-template-columns: 1fr;
@@ -457,6 +621,10 @@ select {
   }
 
   .deadline-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-grid {
     grid-template-columns: 1fr;
   }
 }

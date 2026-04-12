@@ -16,12 +16,23 @@
         <p class="eyebrow">Student Progress Dashboard</p>
         <h1>PhD Milestone Tracker</h1>
         <p class="hero__lede">
-          Track your major milestones in one place. Your progress is saved in
-          your own browser.
+          Track the CU Boulder Computer Science PhD milestones, recommended
+          timing, forms, and advising resources in one place. Your progress is
+          saved in your own browser.
         </p>
       </header>
 
       <main class="dashboard">
+        <nav class="tab-bar" aria-label="Dashboard sections">
+          <button class="tab-button tab-button--active" type="button" data-tab="planner">
+            Planner
+          </button>
+          <button class="tab-button" type="button" data-tab="resources">
+            Resources
+          </button>
+        </nav>
+
+        <div id="plannerTab" class="tab-panel tab-panel--active">
         <section class="panel panel--top">
           <div>
             <div class="section-heading">
@@ -63,7 +74,7 @@
             <div class="summary-stats">
               <div>
                 <span class="summary-stats__label">Completed</span>
-                <strong id="completedCount">0 / 8</strong>
+                <strong id="completedCount">0 / 10</strong>
               </div>
               <div>
                 <span class="summary-stats__label">Next deadline</span>
@@ -83,7 +94,7 @@
               <p class="section-heading__kicker">Milestones</p>
               <h2>Tracker</h2>
             </div>
-            <p>Update each milestone as you move through the program.</p>
+            <p>Track the professional development courses, BIN classes, credits, and milestone exams.</p>
           </div>
 
           <div class="tracker-shell">
@@ -105,62 +116,50 @@
           </div>
         </section>
 
-        <section class="panel panel--two-up">
-          <div>
-            <div class="section-heading">
-              <div>
-                <p class="section-heading__kicker">Deadlines</p>
-                <h2>Recommended Timeline</h2>
-              </div>
-              <p>These dates are generated from your entry semester.</p>
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="section-heading__kicker">Deadlines</p>
+              <h2>Recommended Timeline</h2>
             </div>
-
-            <div id="deadlineCards" class="deadline-grid">
-              <article class="deadline-placeholder">
-                <p>Select an entry semester to generate your roadmap.</p>
-              </article>
-            </div>
+            <p>These dates are generated from your entry semester.</p>
           </div>
 
-          <div>
-            <div class="section-heading">
-              <div>
-                <p class="section-heading__kicker">Simple Guide</p>
-                <h2>What To Finish First</h2>
-              </div>
-            </div>
-
-            <div class="timeline">
-              <article class="timeline-step">
-                <span>1</span>
-                <div>
-                  <h3>Coursework first</h3>
-                  <p>Finish orientation, methods, and your core credits early.</p>
-                </div>
-              </article>
-              <article class="timeline-step">
-                <span>2</span>
-                <div>
-                  <h3>Qualifying exam</h3>
-                  <p>After the basics are complete, move into the exam stage.</p>
-                </div>
-              </article>
-              <article class="timeline-step">
-                <span>3</span>
-                <div>
-                  <h3>Committee and proposal</h3>
-                  <p>Form your committee and complete the proposal defense.</p>
-                </div>
-              </article>
-              <article class="timeline-step">
-                <span>4</span>
-                <div>
-                  <h3>Draft and defense</h3>
-                  <p>Track the dissertation draft and final defense here.</p>
-                </div>
-              </article>
-            </div>
+          <div id="deadlineCards" class="deadline-grid">
+            <article class="deadline-placeholder">
+              <p>Select an entry semester to generate your roadmap.</p>
+            </article>
           </div>
+
+          <p class="panel-note">
+            Format of the Area Exam and Proposal Defense depends on your advisor,
+            research area, and committee.
+          </p>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="section-heading__kicker">Forms &amp; Instructions</p>
+              <h2>Milestone Guide</h2>
+            </div>
+            <p>Keep the key paperwork and staff-advisor steps visible while you plan.</p>
+          </div>
+
+          <div id="guideCards" class="guide-grid" aria-live="polite"></div>
+        </section>
+        </div>
+
+        <section id="resourcesTab" class="panel tab-panel">
+          <div class="section-heading">
+            <div>
+              <p class="section-heading__kicker">Resources</p>
+              <h2>Useful Links</h2>
+            </div>
+            <p>Official department and Graduate School pages for requirements, forms, and deadlines.</p>
+          </div>
+
+          <div id="usefulLinksList" class="resource-grid" aria-live="polite"></div>
         </section>
       </main>
     </div>

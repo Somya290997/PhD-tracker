@@ -147,10 +147,10 @@ const resourceLinks = [
     url: "https://www.colorado.edu/cs/students/graduate-students/forms-policies",
   },
   {
-    title: "Rajshree Shrestha",
+    title: "Advising Appointment with Rajshree",
     description:
       "Graduate program contact for questions about forms, committees, deadlines, and milestone routing.",
-    url: "https://www.colorado.edu/cs/rajshree-shrestha",
+    url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
   },
 ];
 

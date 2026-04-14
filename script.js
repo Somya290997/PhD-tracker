@@ -147,7 +147,7 @@ const resourceLinks = [
     url: "https://www.colorado.edu/cs/students/graduate-students/forms-policies",
   },
   {
-    title: "Advising Appointment with Rajshree",
+    title: "Rajshree's drop in",
     description:
       "Graduate program contact for questions about forms, committees, deadlines, and milestone routing.",
     url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
@@ -197,7 +197,7 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/cs/students/graduate-students/forms-policies",
       },
       {
-        label: "Academic advising drop-in",
+        label: "Rajshree's drop in",
         url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
@@ -229,7 +229,7 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/graduateschool/academics/forms-current-students/doctoral-comprehensive-exam",
       },
       {
-        label: "Academic advising drop-in",
+        label: "Rajshree's drop in",
         url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
@@ -265,7 +265,7 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/graduateschool/academics/graduation-requirements/doctoral-graduation-information/deadlines-doctoral-degree",
       },
       {
-        label: "Academic advising drop-in",
+        label: "Rajshree's drop in",
         url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],

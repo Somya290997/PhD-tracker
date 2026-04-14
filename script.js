@@ -197,8 +197,8 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/cs/students/graduate-students/forms-policies",
       },
       {
-        label: "Rajshree Shrestha",
-        url: "https://www.colorado.edu/cs/rajshree-shrestha",
+        label: "Academic advising drop-in",
+        url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
   },
@@ -229,8 +229,8 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/graduateschool/academics/forms-current-students/doctoral-comprehensive-exam",
       },
       {
-        label: "Rajshree Shrestha",
-        url: "https://www.colorado.edu/cs/rajshree-shrestha",
+        label: "Academic advising drop-in",
+        url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
   },
@@ -265,8 +265,8 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/graduateschool/academics/graduation-requirements/doctoral-graduation-information/deadlines-doctoral-degree",
       },
       {
-        label: "Rajshree Shrestha",
-        url: "https://www.colorado.edu/cs/rajshree-shrestha",
+        label: "Academic advising drop-in",
+        url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
   },

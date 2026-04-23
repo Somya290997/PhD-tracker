@@ -6,95 +6,51 @@
     <title>PhD Milestone Tracker</title>
     <meta
       name="description"
-      content="A simple and responsive PhD milestone tracker for students."
+      content="A clean tracking interface for CU Boulder Computer Science PhD milestones."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@700&display=swap"
+      rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero">
-        <p class="eyebrow">Student Progress Dashboard</p>
+    <main class="page-shell dashboard">
+      <section class="intro-card">
         <h1>PhD Milestone Tracker</h1>
-        <p class="hero__lede">
-          Track the CU Boulder Computer Science PhD milestones, recommended
-          timing, forms, and advising resources in one place. Your progress is
-          saved in your own browser.
+        <p>
+          Track milestone timing, coursework requirements, forms, FAQs, and
+          advising touchpoints for the CU Boulder Computer Science PhD.
         </p>
-      </header>
+      </section>
 
-      <main class="dashboard">
-        <nav class="tab-bar" aria-label="Dashboard sections">
-          <button class="tab-button tab-button--active" type="button" data-tab="planner">
-            Planner
-          </button>
-          <button class="tab-button" type="button" data-tab="resources">
-            Resources
-          </button>
-        </nav>
+      <nav class="tab-bar" aria-label="Tracker sections">
+        <button
+          class="tab-button tab-button--active"
+          type="button"
+          data-tab="plan"
+          aria-selected="true"
+        >
+          Milestone Tracker
+        </button>
+        <button
+          class="tab-button"
+          type="button"
+          data-tab="faq"
+          aria-selected="false"
+        >
+          Tracker FAQs
+        </button>
+      </nav>
 
-        <div id="plannerTab" class="tab-panel tab-panel--active">
-        <section class="panel panel--top">
-          <div>
-            <div class="section-heading">
-              <div>
-                <p class="section-heading__kicker">Student Details</p>
-                <h2>Your Tracker</h2>
-              </div>
-            </div>
-
-            <div class="profile-grid">
-              <label class="field">
-                <span>Student Name</span>
-                <input id="studentName" type="text" placeholder="Enter your name" />
-              </label>
-              <label class="field">
-                <span>Program</span>
-                <input id="programName" type="text" placeholder="Computer Science PhD" />
-              </label>
-              <label class="field">
-                <span>Advisor</span>
-                <input id="advisorName" type="text" placeholder="Enter your advisor" />
-              </label>
-              <label class="field">
-                <span>Entry Semester</span>
-                <select id="entrySemester">
-                  <option value="">Choose a semester</option>
-                </select>
-              </label>
-            </div>
-          </div>
-
-          <aside class="summary-card">
-            <p class="summary-card__eyebrow">Progress</p>
-            <p class="summary-card__title" id="summaryTitle">No student profile yet</p>
-            <p class="summary-card__body" id="summaryBody">
-              Add your basic details to personalize the tracker.
-            </p>
-
-            <div class="summary-stats">
-              <div>
-                <span class="summary-stats__label">Completed</span>
-                <strong id="completedCount">0 / 10</strong>
-              </div>
-              <div>
-                <span class="summary-stats__label">Next deadline</span>
-                <strong id="nextDeadlineLabel">Select a semester</strong>
-              </div>
-            </div>
-
-            <button id="resetTracker" class="ghost-button" type="button">
-              Reset saved tracker data
-            </button>
-          </aside>
-        </section>
-
+      <div id="planTab" class="tab-panel tab-panel--active">
         <section class="panel">
           <div class="section-heading">
             <div>
-              <p class="section-heading__kicker">Milestones</p>
-              <h2>Tracker</h2>
+              <h2>Degree Tracker</h2>
             </div>
-            <p>Track the professional development courses, BIN classes, credits, and milestone exams.</p>
           </div>
 
           <div class="tracker-shell">
@@ -105,7 +61,7 @@
                     <th>Milestone</th>
                     <th>Input</th>
                     <th>Status</th>
-                    <th>Dependency</th>
+                    <th>Requirement</th>
                   </tr>
                 </thead>
                 <tbody id="trackerTableBody"></tbody>
@@ -117,19 +73,57 @@
         </section>
 
         <section class="panel">
+          <div class="section-tabline">
+            <span class="line-tab line-tab--active">Recommended</span>
+          </div>
+
+          <label class="field field--inline">
+            <span>Entry Semester</span>
+            <select id="entrySemester">
+              <option value="">Choose a semester</option>
+            </select>
+          </label>
+
           <div class="section-heading">
             <div>
-              <p class="section-heading__kicker">Deadlines</p>
-              <h2>Recommended Timeline</h2>
+              <h2>Your Deadlines</h2>
             </div>
-            <p>These dates are generated from your entry semester.</p>
           </div>
+
+          <p class="deadline-intro">
+            Select your entry semester to see your recommended deadline schedule.
+          </p>
 
           <div id="deadlineCards" class="deadline-grid">
             <article class="deadline-placeholder">
               <p>Select an entry semester to generate your roadmap.</p>
             </article>
           </div>
+
+          <article class="dropin-card">
+            <div>
+              <p class="dropin-card__kicker">Advisor Drop-ins</p>
+              <h3>Rajshree&apos;s Drop-ins</h3>
+              <div class="dropin-card__inline">
+                <div class="dropin-card__actions">
+                  <a
+                    class="dropin-card__link"
+                    href="mailto:Rajshree.Shrestha@colorado.edu"
+                  >
+                    Email
+                  </a>
+                  <a
+                    class="dropin-card__link"
+                    href="https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Drop-in
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
 
           <p class="panel-note">
             Format of the Area Exam and Proposal Defense depends on your advisor,
@@ -143,26 +137,36 @@
               <p class="section-heading__kicker">Forms &amp; Instructions</p>
               <h2>Milestone Guide</h2>
             </div>
-            <p>Keep the key paperwork and staff-advisor steps visible while you plan.</p>
+            <p>Open each milestone for the related paperwork, steps, and official links.</p>
           </div>
 
           <div id="guideCards" class="guide-grid" aria-live="polite"></div>
         </section>
-        </div>
+      </div>
 
-        <section id="resourcesTab" class="panel tab-panel">
+      <div id="faqTab" class="tab-panel">
+        <section class="panel">
           <div class="section-heading">
             <div>
-              <p class="section-heading__kicker">Resources</p>
-              <h2>Useful Links</h2>
+              <h2>Milestone FAQs</h2>
             </div>
-            <p>Official department and Graduate School pages for requirements, forms, and deadlines.</p>
+            <p>Quick answers and official links for the policies behind this tracker.</p>
           </div>
 
-          <div id="usefulLinksList" class="resource-grid" aria-live="polite"></div>
+          <div id="faqCards" class="resource-grid" aria-live="polite"></div>
         </section>
-      </main>
-    </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="page-shell">
+        <p>
+          Tracking aid for the CU Boulder Computer Science PhD. Verify final
+          deadlines and submission requirements with the department and Graduate
+          School.
+        </p>
+      </div>
+    </footer>
 
     <script src="./script.js"></script>
   </body>

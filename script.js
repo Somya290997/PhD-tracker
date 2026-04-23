@@ -1,10 +1,4 @@
-const STORAGE_KEY = "responsive_phd_tracker";
-const TAB_STORAGE_KEY = "responsive_phd_tracker_tab";
-
-const initialState = {
-  studentName: "",
-  programName: "",
-  advisorName: "",
+const state = {
   entrySemester: "",
   profDev6000: false,
   profDev6100: false,
@@ -12,7 +6,8 @@ const initialState = {
   bin1: "",
   bin2: "",
   bin3: "",
-  electiveCredits: 0,
+  csDepthClass: "",
+  nonCsCredits: 0,
   areaExam: false,
   proposalDefense: false,
   dissertationDefense: false,
@@ -91,7 +86,8 @@ const semesterRules = [
   {
     id: "proposalDefense",
     title: "Proposal Defense / Comprehensive Exam",
-    note: "Complete after the Area Exam and 30 course credits, no later than your eighth semester.",
+    note:
+      "Complete after the Area Exam and 30 total course credits, including one CS depth class. Up to 15 credits may be non-CS.",
     offset: 7,
     className: "deadline-card--proposal",
   },
@@ -104,52 +100,41 @@ const semesterRules = [
   },
 ];
 
-const resourceLinks = [
+const faqItems = [
   {
-    title: "Degree requirements",
+    title: "What coursework counts before the proposal defense?",
     description:
-      "Official CS PhD requirements, milestone timing, committee details, and dissertation-hour expectations.",
+      "The tracker assumes the three professional development courses, BIN 1-3, one CS depth class worth 3 credits at the 5XXX/6XXX/7XXX level, and up to 15 non-CS credits for the full 30-course-credit milestone.",
     url: "https://www.colorado.edu/cs/academics/graduate-programs/doctor-philosophy/degree-requirements",
   },
   {
-    title: "Breadth (BIN) course list",
-    description: "Current approved breadth bins and course options for the CS PhD.",
+    title: "Where do I find the official breadth course lists?",
+    description:
+      "Use the department breadth page to confirm current BIN 1, BIN 2, and BIN 3 options before finalizing your tracker.",
     url: "https://www.colorado.edu/cs/academics/graduate-programs/breadth-courses",
   },
   {
-    title: "Transfer of credits",
+    title: "How many credits may be outside computer science?",
     description:
-      "Graduate School transfer credit request details, process, and degree audit applicability.",
-    url: "https://www.colorado.edu/graduateschool/academics/forms-current-students/transfer-credit-request-and-degree-audit-applicability",
-  },
-  {
-    title: "Committee details",
-    description:
-      "Department guidance for the Area Exam, doctoral committee, proposal, and dissertation requirements.",
+      "This tracker counts up to 15 non-CS credits toward the 30-course-credit milestone before the proposal defense.",
     url: "https://www.colorado.edu/cs/academics/graduate-programs/doctor-philosophy/degree-requirements",
   },
   {
-    title: "Dissertation hours information",
+    title: "Where are the department milestone forms?",
     description:
-      "Doctoral dissertation-hour expectations and how dissertation credits fit into the PhD plan.",
-    url: "https://www.colorado.edu/cs/academics/graduate-programs/doctor-philosophy/degree-requirements",
-  },
-  {
-    title: "Graduate School doctoral deadlines",
-    description:
-      "Term deadlines for graduation, doctoral exams, dissertation submission, and final paperwork.",
-    url: "https://www.colorado.edu/graduateschool/academics/graduation-requirements/doctoral-graduation-information/deadlines-doctoral-degree",
-  },
-  {
-    title: "Forms and policies",
-    description:
-      "Department-level PhD forms, including the Area Exam Report and defense-related paperwork guidance.",
+      "Use the Forms and Policies page for department-level Area Exam and related milestone paperwork guidance.",
     url: "https://www.colorado.edu/cs/students/graduate-students/forms-policies",
   },
   {
-    title: "Rajshree's drop in",
+    title: "Where do Graduate School forms and deadlines live?",
     description:
-      "Graduate program contact for questions about forms, committees, deadlines, and milestone routing.",
+      "Use the Graduate School pages for candidacy, doctoral exam forms, thesis approval, and semester graduation deadlines.",
+    url: "https://www.colorado.edu/graduateschool/academics/graduation-requirements/doctoral-graduation-information/deadlines-doctoral-degree",
+  },
+  {
+    title: "How do I book Rajshree's drop-ins?",
+    description:
+      "Rajshree's drop-ins are the best place for milestone timing, committee, forms, and deadline questions.",
     url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
   },
 ];
@@ -162,7 +147,7 @@ const milestoneGuide = [
     forms: [{ label: "None" }],
     instructions: [
       "No department form is required for BIN completion.",
-      "Complete one approved breadth course from each bin and keep the selections aligned with your plan of study.",
+      "Complete one approved breadth course from each bin and keep the selections aligned with your degree requirements.",
     ],
     links: [
       {
@@ -197,7 +182,7 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/cs/students/graduate-students/forms-policies",
       },
       {
-        label: "Rajshree's drop in",
+        label: "Rajshree's drop-ins",
         url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
@@ -229,7 +214,7 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/graduateschool/academics/forms-current-students/doctoral-comprehensive-exam",
       },
       {
-        label: "Rajshree's drop in",
+        label: "Rajshree's drop-ins",
         url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
@@ -257,7 +242,7 @@ const milestoneGuide = [
       "Once your committee is approved, complete the final exam form about two weeks before your exam.",
       "Do not submit the exam envelope too early because it expires and must be reissued if it lapses.",
       "After you successfully complete your defense, submit the Thesis Approval Form and Survey of Earned Doctorates.",
-      "Follow the Graduate School deadlines for the term you are graduating and schedule a planning meeting with the staff academic advisor.",
+      "Follow the Graduate School deadlines for the term you are graduating and schedule a milestone meeting with the staff academic advisor.",
     ],
     links: [
       {
@@ -265,20 +250,18 @@ const milestoneGuide = [
         url: "https://www.colorado.edu/graduateschool/academics/graduation-requirements/doctoral-graduation-information/deadlines-doctoral-degree",
       },
       {
-        label: "Rajshree's drop in",
+        label: "Rajshree's drop-ins",
         url: "https://outlook.office365.com/owa/calendar/CS_GradAdvisor@o365.colorado.edu/bookings/",
       },
     ],
   },
 ];
 
-const state = loadState();
-
 const milestones = [
   {
     key: "profDev6000",
     label: "Professional Development 6000",
-    dependency: "None",
+    requirement: "Required",
     renderInput: () => renderCheckbox("profDev6000"),
     status: () => checkboxStatus("profDev6000"),
     complete: () => state.profDev6000,
@@ -286,7 +269,7 @@ const milestones = [
   {
     key: "profDev6100",
     label: "Professional Development 6100",
-    dependency: "None",
+    requirement: "Required",
     renderInput: () => renderCheckbox("profDev6100"),
     status: () => checkboxStatus("profDev6100"),
     complete: () => state.profDev6100,
@@ -294,7 +277,7 @@ const milestones = [
   {
     key: "profDev6200",
     label: "Professional Development 6200",
-    dependency: "None",
+    requirement: "Required",
     renderInput: () => renderCheckbox("profDev6200"),
     status: () => checkboxStatus("profDev6200"),
     complete: () => state.profDev6200,
@@ -302,7 +285,7 @@ const milestones = [
   {
     key: "bin1",
     label: "BIN 1",
-    dependency: "None",
+    requirement: "One approved breadth course",
     renderInput: () => renderSelect("bin1", courseOptions.bin1, "Select BIN 1 course"),
     status: () => selectStatus(state.bin1),
     complete: () => Boolean(state.bin1),
@@ -310,7 +293,7 @@ const milestones = [
   {
     key: "bin2",
     label: "BIN 2",
-    dependency: "None",
+    requirement: "One approved breadth course",
     renderInput: () => renderSelect("bin2", courseOptions.bin2, "Select BIN 2 course"),
     status: () => selectStatus(state.bin2),
     complete: () => Boolean(state.bin2),
@@ -318,23 +301,31 @@ const milestones = [
   {
     key: "bin3",
     label: "BIN 3",
-    dependency: "None",
+    requirement: "One approved breadth course",
     renderInput: () => renderSelect("bin3", courseOptions.bin3, "Select BIN 3 course"),
     status: () => selectStatus(state.bin3),
     complete: () => Boolean(state.bin3),
   },
   {
-    key: "electiveCredits",
-    label: "Depth / elective credits",
-    dependency: "Advisor-approved depth/elective coursework",
-    renderInput: () => renderNumber("electiveCredits", 18, "18 credits"),
-    status: () => countStatus(state.electiveCredits, 18),
-    complete: () => state.electiveCredits >= 18,
+    key: "csDepthClass",
+    label: "CS Depth class",
+    requirement: "1 CS depth class required, 3 credits, course level 5XXX/6XXX/7XXX",
+    renderInput: () => renderText("csDepthClass", ""),
+    status: () => textStatus(state.csDepthClass),
+    complete: () => Boolean(state.csDepthClass.trim()),
+  },
+  {
+    key: "nonCsCredits",
+    label: "Non-CS courses",
+    requirement: "15 credits may be non-CS courses",
+    renderInput: () => renderNumber("nonCsCredits", null, "15 credits may be non-CS courses"),
+    status: () => countStatus(state.nonCsCredits, 15),
+    complete: () => state.nonCsCredits >= 15,
   },
   {
     key: "areaExam",
     label: "Area Exam",
-    dependency: "BIN 1, BIN 2, BIN 3",
+    requirement: "BIN 1, BIN 2, BIN 3",
     renderInput: () => renderCheckbox("areaExam", eligibility.areaExam()),
     status: () => gatedStatus("areaExam", eligibility.areaExam()),
     complete: () => state.areaExam,
@@ -342,7 +333,7 @@ const milestones = [
   {
     key: "proposalDefense",
     label: "Proposal Defense / Comprehensive Exam",
-    dependency: "Area Exam + 30 total course credits",
+    requirement: "All above + Area Exam",
     renderInput: () => renderCheckbox("proposalDefense", eligibility.proposalDefense()),
     status: () => gatedStatus("proposalDefense", eligibility.proposalDefense()),
     complete: () => state.proposalDefense,
@@ -350,7 +341,7 @@ const milestones = [
   {
     key: "dissertationDefense",
     label: "Dissertation Defense",
-    dependency: "Proposal Defense / Comprehensive Exam",
+    requirement: "Proposal Defense / Comprehensive Exam",
     renderInput: () =>
       renderCheckbox("dissertationDefense", eligibility.dissertationDefense()),
     status: () => gatedStatus("dissertationDefense", eligibility.dissertationDefense()),
@@ -363,26 +354,15 @@ const eligibility = {
     return binsComplete();
   },
   proposalDefense() {
-    return state.areaExam && totalCourseCredits() >= 30;
+    return professionalDevelopmentComplete() && state.areaExam && totalCourseCredits() >= 30;
   },
   dissertationDefense() {
     return state.proposalDefense;
   },
 };
 
-function loadState() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return { ...initialState };
-
-  try {
-    return { ...initialState, ...JSON.parse(raw) };
-  } catch (error) {
-    return { ...initialState };
-  }
-}
-
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+function professionalDevelopmentComplete() {
+  return state.profDev6000 && state.profDev6100 && state.profDev6200;
 }
 
 function binsComplete() {
@@ -397,8 +377,9 @@ function totalCourseCredits() {
       Number(Boolean(state.bin2)) +
       Number(Boolean(state.bin3))) *
     3;
+  const csDepthCredits = state.csDepthClass.trim() ? 3 : 0;
 
-  return professionalDevelopment + binCredits + state.electiveCredits;
+  return professionalDevelopment + binCredits + csDepthCredits + state.nonCsCredits;
 }
 
 function countStatus(value, goal) {
@@ -413,6 +394,10 @@ function checkboxStatus(key) {
 
 function selectStatus(value) {
   return value ? "Completed" : "Not started";
+}
+
+function textStatus(value) {
+  return value.trim() ? "Completed" : "Not started";
 }
 
 function gatedStatus(key, isEligible) {
@@ -453,17 +438,30 @@ function renderSelect(key, options, placeholder) {
   `;
 }
 
+function renderText(key, placeholder) {
+  return `
+    <input
+      type="text"
+      data-key="${key}"
+      value="${state[key]}"
+      placeholder="${placeholder}"
+    />
+  `;
+}
+
 function renderNumber(key, max, caption) {
+  const maxAttribute = Number.isFinite(max) ? `max="${max}"` : "";
+
   return `
     <div>
       <input
         type="number"
         data-key="${key}"
         min="0"
-        max="${max}"
+        ${maxAttribute}
         value="${state[key]}"
       />
-      <div class="credit-caption">Goal: ${caption}</div>
+      <div class="credit-caption">${caption}</div>
     </div>
   `;
 }
@@ -488,7 +486,7 @@ function renderTracker() {
           <td><strong>${milestone.label}</strong></td>
           <td>${milestone.renderInput()}</td>
           <td>${renderStatus(status)}</td>
-          <td class="tracker-table__dependency">${milestone.dependency}</td>
+          <td class="tracker-table__dependency">${milestone.requirement}</td>
         </tr>
       `;
     })
@@ -509,39 +507,13 @@ function renderTracker() {
             ${renderStatus(status)}
           </div>
           <div class="tracker-card__row">
-            <span>Dependency</span>
-            <p class="tracker-card__dependency">${milestone.dependency}</p>
+            <span>Requirement</span>
+            <p class="tracker-card__dependency">${milestone.requirement}</p>
           </div>
         </article>
       `;
     })
     .join("");
-}
-
-function setupProfileFields() {
-  ["studentName", "programName", "advisorName", "entrySemester"].forEach((fieldId) => {
-    const input = document.getElementById(fieldId);
-    input.value = state[fieldId];
-  });
-}
-
-function renderProfileSummary() {
-  const title = document.getElementById("summaryTitle");
-  const body = document.getElementById("summaryBody");
-
-  if (!state.studentName && !state.programName && !state.advisorName) {
-    title.textContent = "No student profile yet";
-    body.textContent = "Add your basic details to personalize the tracker.";
-    return;
-  }
-
-  const name = state.studentName || "Unnamed student";
-  const program = state.programName || "Computer Science PhD";
-  const advisor = state.advisorName ? `Advisor: ${state.advisorName}.` : "Advisor: TBD.";
-  const semester = state.entrySemester ? `Entry semester: ${state.entrySemester}.` : "";
-
-  title.textContent = `${name} · ${program}`;
-  body.textContent = `${advisor} ${semester} Tracking ${totalCourseCredits()} / 30 course credits toward proposal eligibility.`.trim();
 }
 
 function generateSemesterOptions() {
@@ -582,24 +554,16 @@ function renderDeadlines() {
   const wrap = document.getElementById("deadlineCards");
 
   if (!state.entrySemester) {
-    wrap.innerHTML = `
-      <article class="deadline-placeholder">
-        <p>Select an entry semester to generate your roadmap.</p>
-      </article>
-    `;
+    wrap.innerHTML = "";
     return;
   }
 
   wrap.innerHTML = semesterRules
     .map(
-      (rule, index) => `
+      (rule) => `
         <article class="deadline-card ${rule.className}">
-          <div class="deadline-card__index">${index + 1}</div>
-          <div>
-            <p>${rule.title}</p>
-            <strong>${semesterLabelAfter(state.entrySemester, rule.offset)}</strong>
-            <h3>${rule.note}</h3>
-          </div>
+          <p>${rule.title}</p>
+          <strong>${semesterLabelAfter(state.entrySemester, rule.offset)}</strong>
         </article>
       `
     )
@@ -661,55 +625,20 @@ function renderMilestoneGuide() {
     .join("");
 }
 
-function renderResourceLinks() {
-  const wrap = document.getElementById("usefulLinksList");
+function renderFaqs() {
+  const wrap = document.getElementById("faqCards");
 
-  wrap.innerHTML = resourceLinks
+  wrap.innerHTML = faqItems
     .map(
-      (link) => `
-        <a class="resource-link" href="${link.url}" target="_blank" rel="noreferrer">
-          <strong>${link.title}</strong>
-          <span>${link.description}</span>
-        </a>
+      (item) => `
+        <article class="resource-link">
+          <strong>${item.title}</strong>
+          <span>${item.description}</span>
+          <a href="${item.url}" target="_blank" rel="noreferrer">Open official page</a>
+        </article>
       `
     )
     .join("");
-}
-
-function completedMilestonesCount() {
-  return milestones.filter((milestone) => milestone.complete()).length;
-}
-
-function currentNextDeadline() {
-  if (!state.entrySemester) return null;
-
-  const completionMap = {
-    binClasses: binsComplete(),
-    areaExam: state.areaExam,
-    proposalDefense: state.proposalDefense,
-    dissertationDefense: state.dissertationDefense,
-  };
-
-  return semesterRules.find((rule) => !completionMap[rule.id]) || null;
-}
-
-function renderOverview() {
-  const completedCount = document.getElementById("completedCount");
-  const nextDeadlineLabel = document.getElementById("nextDeadlineLabel");
-
-  completedCount.textContent = `${completedMilestonesCount()} / ${milestones.length}`;
-
-  const next = currentNextDeadline();
-  if (!next) {
-    nextDeadlineLabel.textContent = state.entrySemester
-      ? "All planned deadlines met"
-      : "Select a semester";
-    return;
-  }
-
-  nextDeadlineLabel.textContent = state.entrySemester
-    ? `${next.title} · ${semesterLabelAfter(state.entrySemester, next.offset)}`
-    : next.title;
 }
 
 function handleInputChange(event) {
@@ -722,31 +651,20 @@ function handleInputChange(event) {
     state[key] = target.checked;
   } else if (target.type === "number") {
     const nextValue = Number.parseInt(target.value, 10) || 0;
-    const max = Number.parseInt(target.max, 10) || nextValue;
-    state[key] = Math.max(0, Math.min(nextValue, max));
+    const max = Number.parseInt(target.max, 10);
+    state[key] = Number.isFinite(max)
+      ? Math.max(0, Math.min(nextValue, max))
+      : Math.max(0, nextValue);
   } else {
     state[key] = target.value;
   }
 
-  saveState();
   renderAll();
-}
-
-function resetTracker() {
-  Object.assign(state, initialState);
-  saveState();
-  renderAll();
-  setupProfileFields();
-}
-
-function loadActiveTab() {
-  const saved = localStorage.getItem(TAB_STORAGE_KEY);
-  return saved === "resources" ? "resources" : "planner";
 }
 
 function setActiveTab(tabName) {
-  const plannerTab = document.getElementById("plannerTab");
-  const resourcesTab = document.getElementById("resourcesTab");
+  const planTab = document.getElementById("planTab");
+  const faqTab = document.getElementById("faqTab");
 
   document.querySelectorAll(".tab-button").forEach((button) => {
     const isActive = button.dataset.tab === tabName;
@@ -754,31 +672,26 @@ function setActiveTab(tabName) {
     button.setAttribute("aria-selected", String(isActive));
   });
 
-  plannerTab.classList.toggle("tab-panel--active", tabName === "planner");
-  resourcesTab.classList.toggle("tab-panel--active", tabName === "resources");
-  localStorage.setItem(TAB_STORAGE_KEY, tabName);
+  planTab.classList.toggle("tab-panel--active", tabName === "plan");
+  faqTab.classList.toggle("tab-panel--active", tabName === "faq");
 }
 
 function bindEvents() {
-  document.addEventListener("input", handleInputChange);
   document.addEventListener("change", handleInputChange);
-  document.getElementById("resetTracker").addEventListener("click", resetTracker);
+
   document.querySelectorAll(".tab-button").forEach((button) => {
     button.addEventListener("click", () => setActiveTab(button.dataset.tab));
   });
 }
 
 function renderAll() {
-  renderProfileSummary();
   renderTracker();
   renderDeadlines();
   renderMilestoneGuide();
-  renderResourceLinks();
-  renderOverview();
+  renderFaqs();
 }
 
 generateSemesterOptions();
-setupProfileFields();
 bindEvents();
-setActiveTab(loadActiveTab());
+setActiveTab("plan");
 renderAll();

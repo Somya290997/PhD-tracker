@@ -187,7 +187,7 @@ select {
 }
 
 .section-heading h2 {
-  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
   line-height: 1.08;
 }
 

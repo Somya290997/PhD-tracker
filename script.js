@@ -104,7 +104,7 @@ const faqItems = [
   {
     title: "What coursework counts before the proposal defense?",
     description:
-      "The tracker assumes the three professional development courses, BIN 1-3, one CS depth class worth 3 credits at the 5XXX/6XXX/7XXX level, and up to 15 non-CS credits for the full 30-course-credit milestone.",
+      "The tracker assumes the three professional development courses, BIN 1-3, one CS depth class worth 3 credits at the 5XXX/6XXX/7XXX level, excluding CSCI 5900, CSCI 7900, and CSCI 8990, and up to 15 non-CS credits for the full 30-course-credit milestone.",
     url: "https://www.colorado.edu/cs/academics/graduate-programs/doctor-philosophy/degree-requirements",
   },
   {
@@ -309,10 +309,16 @@ const milestones = [
   {
     key: "csDepthClass",
     label: "CS Depth class",
-    requirement: "1 CS depth class required, 3 credits, course level 5XXX/6XXX/7XXX",
-    renderInput: () => renderText("csDepthClass", ""),
-    status: () => textStatus(state.csDepthClass),
-    complete: () => Boolean(state.csDepthClass.trim()),
+    requirement:
+      "1 CSCI depth class required, 3 credits, course level 5XXX/6XXX/7XXX, not CSCI 5900, CSCI 7900, or CSCI 8990",
+    renderInput: () =>
+      renderText(
+        "csDepthClass",
+        "",
+        "Enter as CSCI ####. Must be a 3-credit CSCI 5XXX/6XXX/7XXX course, excluding 5900, 7900, and 8990."
+      ),
+    status: () => depthCourseStatus(),
+    complete: () => validCsDepthCourse(),
   },
   {
     key: "nonCsCredits",
@@ -377,7 +383,7 @@ function totalCourseCredits() {
       Number(Boolean(state.bin2)) +
       Number(Boolean(state.bin3))) *
     3;
-  const csDepthCredits = state.csDepthClass.trim() ? 3 : 0;
+  const csDepthCredits = validCsDepthCourse() ? 3 : 0;
 
   return professionalDevelopment + binCredits + csDepthCredits + state.nonCsCredits;
 }
@@ -396,8 +402,22 @@ function selectStatus(value) {
   return value ? "Completed" : "Not started";
 }
 
-function textStatus(value) {
-  return value.trim() ? "Completed" : "Not started";
+function validCsDepthCourse() {
+  const normalized = state.csDepthClass.trim().toUpperCase();
+  const match = normalized.match(/^CSCI\s*(\d{4})\b/);
+
+  if (!match) return false;
+
+  const courseNumber = match[1];
+  const firstDigit = courseNumber[0];
+  const excludedCourses = new Set(["5900", "7900", "8990"]);
+
+  return ["5", "6", "7"].includes(firstDigit) && !excludedCourses.has(courseNumber);
+}
+
+function depthCourseStatus() {
+  if (!state.csDepthClass.trim()) return "Not started";
+  return validCsDepthCourse() ? "Completed" : "Not eligible";
 }
 
 function gatedStatus(key, isEligible) {
@@ -438,14 +458,17 @@ function renderSelect(key, options, placeholder) {
   `;
 }
 
-function renderText(key, placeholder) {
+function renderText(key, placeholder, caption = "") {
   return `
-    <input
-      type="text"
-      data-key="${key}"
-      value="${state[key]}"
-      placeholder="${placeholder}"
-    />
+    <div>
+      <input
+        type="text"
+        data-key="${key}"
+        value="${state[key]}"
+        placeholder="${placeholder}"
+      />
+      ${caption ? `<div class="credit-caption">${caption}</div>` : ""}
+    </div>
   `;
 }
 
